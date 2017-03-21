@@ -18,8 +18,8 @@
 # include "libft/libft.h"
 # include "minilibx_macos/mlx.h"
 
-# define mapWidth 24
-# define mapHeight 24
+# define MAPWIDTH 24
+# define MAPHEIGHT 24
 # define RED 0x8b0000
 # define BLUE 0x00ffff
 # define GREEN 0xFF00
@@ -45,54 +45,51 @@
 # define PAUSE 35
 
 typedef struct	s_wolf
-{	
-	int 		**map;
+{
+	int			**map;
 	int			hau;
 	int			lar;
 	void		*init;
 	void		*win;
 	void		*image;
 	char		*data;
-	int 		bpp;
-	int 		size_l;
-	int 		endian;
-	int 		color;
+	int			bpp;
+	int			size_l;
+	int			endian;
+	int			color;
+	double		posx;
+	double		posy;
+	double		dirx;
+	double		diry;
+	double		olddirx;
+	double		oldplanex;
+	double		planex;
+	double		planey;
+	double		camerax;
+	double		rayposx;
+	double		rayposy;
+	double		raydirx;
+	double		raydiry;
+	int			mapx;
+	int			mapy;
+	double		sidedistx;
+	double		sidedisty;
 
-	double		posX;
-	double		posY;
-	double		dirX;
-	double		dirY;
-	double		oldDirX;
-	double		oldPlaneX;
-	double		planeX;
-	double		planeY;
-
-	double		cameraX;
-	double		rayPosX;
-	double		rayPosY;
-	double		rayDirX;
-	double		rayDirY;
-
-	int 		mapX;
-	int 		mapY;
-	double		sideDistX;
-	double		sideDistY;
-	double		deltaDistX;
-	double		deltaDistY;
-	double		perpWallDist;
-	int 		stepX;
-	int 		stepY;
-	int 		hit;
-	int 		side;
-	int 		lineHeight;
-	int 		drawStart;
-	int 		drawEnd;
+	double		deltadistx;
+	double		deltadisty;
+	double		perpwalldist;
+	int			stepx;
+	int			stepy;
+	int			hit;
+	int			side;
+	int			lineheight;
+	int			drawstart;
+	int			drawend;
 	double		otime;
 	double		time;
-
-	double 		moveSpeed;
-	double 		rotSpeed;
-	double 		frameTime;
+	double		movespeed;
+	double		rotspeed;
+	double		frametime;
 }				t_wolf;
 
 void			init(t_wolf *env);
@@ -103,6 +100,8 @@ void			w_init(t_wolf *env, int x);
 void			w_step(t_wolf *env);
 void			w_stripe(t_wolf *env);
 void			w_draw(t_wolf *env, int x);
+void			w_wall(t_wolf *env);
 int				*sp_toi(char **line);
 int				load_map(t_wolf *env);
+void			mlx_pixel_image(int x, int y, t_wolf *env, int color);
 #endif

@@ -30,12 +30,12 @@ int				*sp_toi(char **line)
 	return (out);
 }
 
-int			load_map(t_wolf *env)
+int				load_map(t_wolf *env)
 {
-	int		fd;
-	char	*line;
+	int			fd;
+	char		*line;
 
-	if (!(env->map = (int **)malloc(sizeof(int *) * mapHeight + 1)))
+	if (!(env->map = (int **)malloc(sizeof(int *) * MAPHEIGHT + 1)))
 		return (0);
 	if (!(fd = open("map", O_RDONLY)))
 		return (0);
@@ -44,6 +44,6 @@ int			load_map(t_wolf *env)
 		if (!(*(env->map)++ = sp_toi(ft_strsplit(line, ' '))))
 			break ;
 	}
-	env->map = env->map - mapHeight;
+	env->map = env->map - MAPHEIGHT;
 	return (1);
 }

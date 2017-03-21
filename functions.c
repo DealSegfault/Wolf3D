@@ -1,0 +1,112 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   functions.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalit <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/19 18:33:28 by mhalit            #+#    #+#             */
+/*   Updated: 2017/03/19 18:33:40 by mhalit           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "wolf.h"
+
+void		w_init(t_wolf *env, int x)
+{
+	env->camerax = 2 * x / (double)env->lar - 1;
+	env->rayposx = env->posx;
+	env->rayposy = env->posy;
+	env->raydirx = env->dirx + env->planex * env->camerax;
+	env->raydiry = env->diry + env->planey * env->camerax;
+	env->mapx = env->rayposx;
+	env->mapy = env->rayposy;
+	env->deltadistx = sqrt(1 + (env->raydiry * env->raydiry) /
+	(env->raydirx * env->raydirx));
+	env->deltadisty = sqrt(1 + (env->raydirx * env->raydirx) /
+	(env->raydiry * env->raydiry));
+	env->hit = 0;
+}
+
+void		w_step(t_wolf *env)
+{
+	if (env->raydirx < 0)
+	{
+		env->stepx = -1;
+		env->sidedistx = (env->rayposx - env->mapx) * env->deltadistx;
+	}
+	else
+	{
+		env->stepx = 1;
+		env->sidedistx = (env->mapx + 1.0 - env->rayposx) * env->deltadistx;
+	}
+	if (env->raydiry < 0)
+	{
+		env->stepy = -1;
+		env->sidedisty = (env->rayposy - env->mapy) * env->deltadisty;
+	}
+	else
+	{
+		env->stepy = 1;
+		env->sidedisty = (env->mapy + 1.0 - env->rayposy) * env->deltadisty;
+	}
+}
+
+void		w_wall(t_wolf *env)
+{
+	while (env->hit == 0)
+	{
+		if (env->sidedistx < env->sidedisty)
+		{
+			env->sidedistx += env->deltadistx;
+			env->mapx += env->stepx;
+			env->side = 0;
+		}
+		else
+		{
+			env->sidedisty += env->deltadisty;
+			env->mapy += env->stepy;
+			env->side = 1;
+		}
+		env->hit = (env->map[env->mapx][env->mapy] > 0 ? 1 : 0);
+	}
+}
+
+void		w_stripe(t_wolf *env)
+{
+	if (env->side == 0)
+		env->perpwalldist = (env->mapx - env->rayposx +
+		(1 - env->stepx) / 2) / env->raydirx;
+	else
+		env->perpwalldist = (env->mapy - env->rayposy +
+		(1 - env->stepy) / 2) / env->raydiry;
+	env->lineheight = (int)(env->hau / env->perpwalldist);
+	env->drawstart = -env->lineheight / 2 + env->hau / 2;
+	if (env->drawstart < 0)
+		env->drawstart = 0;
+	env->drawend = env->lineheight / 2 + env->hau / 2;
+	if (env->drawend >= env->hau)
+		env->drawend = env->hau - 1;
+}
+
+void		w_draw(t_wolf *env, int x)
+{
+	int y;
+
+	y = 0;
+	while (y < env->drawstart)
+	{
+		mlx_pixel_image(x, y, env, 0x878080);
+		y++;
+	}
+	while (y < env->drawend)
+	{
+		mlx_pixel_image(x, y, env, env->color);
+		y++;
+	}
+	while (y < env->hau)
+	{
+		mlx_pixel_image(x, y, env, 0x808080);
+		y++;
+	}
+}

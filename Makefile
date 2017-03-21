@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = wolf.c hook.c map.c
+SRCS = wolf.c hook.c map.c functions.c
 
-OBJ = wolf.o hook.o map.o
+OBJ = wolf.o hook.o map.o functions.o
 
 LIBS = libft/libft.a
 
