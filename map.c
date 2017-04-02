@@ -6,11 +6,18 @@
 /*   By: mhalit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 06:17:17 by mhalit            #+#    #+#             */
-/*   Updated: 2017/04/02 14:25:07 by mhalit           ###   ########.fr       */
+/*   Updated: 2017/04/02 15:11:54 by mhalit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
+
+int				escape(t_wolf *env)
+{
+	if (env)
+		mlx_destroy_image(env->init, env->image);
+	exit(42);
+}
 
 int				*sp_toi(char **line)
 {

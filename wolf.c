@@ -6,7 +6,7 @@
 /*   By: mhalit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/25 19:24:56 by mhalit            #+#    #+#             */
-/*   Updated: 2017/02/25 19:27:39 by mhalit           ###   ########.fr       */
+/*   Updated: 2017/04/02 15:10:37 by mhalit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int			main(int argc, char **argv)
 		init(env);
 		wolf3d(env);
 		mlx_key_hook(env->win, khook, env);
+		mlx_hook(env->win, 17, 0, escape, env);
 		mlx_loop(env->init);
 	}
 	return (0);
