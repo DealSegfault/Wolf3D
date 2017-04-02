@@ -6,7 +6,7 @@
 /*   By: mhalit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 06:17:17 by mhalit            #+#    #+#             */
-/*   Updated: 2017/03/07 06:17:26 by mhalit           ###   ########.fr       */
+/*   Updated: 2017/04/02 14:25:07 by mhalit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,37 @@ int				*sp_toi(char **line)
 	return (out);
 }
 
+static void		free_split(char **str)
+{
+	int			i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
 int				load_map(t_wolf *env)
 {
 	int			fd;
 	char		*line;
+	char		**tmp;
 
+	tmp = NULL;
 	if (!(env->map = (int **)malloc(sizeof(int *) * MAPHEIGHT + 1)))
 		return (0);
 	if (!(fd = open("map", O_RDONLY)))
 		return (0);
 	while ((get_next_line(fd, &line)) > 0)
 	{
-		if (!(*(env->map)++ = sp_toi(ft_strsplit(line, ' '))))
+		tmp = ft_strsplit(line, ' ');
+		if (!(*(env->map)++ = sp_toi(tmp)))
 			break ;
+		free(line);
+		free_split(tmp);
 	}
 	env->map = env->map - MAPHEIGHT;
 	return (1);
