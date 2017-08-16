@@ -6,7 +6,7 @@
 /*   By: mhalit <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/19 18:33:28 by mhalit            #+#    #+#             */
-/*   Updated: 2017/03/19 18:33:40 by mhalit           ###   ########.fr       */
+/*   Updated: 2017/06/19 17:37:11 by mhalit           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ void		w_wall(t_wolf *env)
 			env->mapy += env->stepy;
 			env->side = 1;
 		}
+		if (env->mapx < 0 || env->mapy < 0)
+		{
+			env->mapx = env->mapx % 4200;
+			env->mapy = env->mapy % 4200;
+		}
 		env->hit = (env->map[env->mapx][env->mapy] > 0 ? 1 : 0);
 	}
 }
@@ -91,20 +96,27 @@ void		w_stripe(t_wolf *env)
 
 void		w_draw(t_wolf *env, int x)
 {
-	int y;
+	int		y;
+	int		pixel;
+	int		d;
 
 	y = 0;
-	while (y < env->drawstart)
+	while (y < env->drawstart - 1)
 	{
-		mlx_pixel_image(x, y, env, 0x878080);
+		mlx_pixel_image(x, y, env, 0xD3D3D3);
 		y++;
 	}
-	while (y < env->drawend)
+	mlx_text_to_img(env);
+	env->id > 4 ? env->id = 0 : 0;
+	while (y < env->drawend - 1)
 	{
-		mlx_pixel_image(x, y, env, env->color);
-		y++;
+		d = y * 256 - env->hau * 128 + env->lineheight * 128;
+		env->texy = (((d * env->texture[env->id].text.width) /
+		env->lineheight) / 256);
+		pixel = get_texture_color(env, env->id);
+		mlx_pixel_image(x, y++, env, pixel);
 	}
-	while (y < env->hau)
+	while (y < env->hau - 1)
 	{
 		mlx_pixel_image(x, y, env, 0x808080);
 		y++;
